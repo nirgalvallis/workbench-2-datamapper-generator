@@ -26,7 +26,7 @@ class DbContainer < Hash
       
       klass.class == Class && (klass == DbObject || accept_class?(klass.superclass))      
     end
-
+    
     # validates that each class object in the array are derived from DbObject
     # raises an exception if an invalid class is received
     def validate_classes classes
@@ -36,23 +36,23 @@ class DbContainer < Hash
     # validates that the received class is derived from DbObject
     # raises an exception if an invalid class is received
     def validate_class klass
-      raise Exception.new "constainer only accepts 'DbObject'" unless accept_class? klass      
+      raise InvalidClassError.new "constainer only accepts 'DbObject' derived classes" unless accept_class? klass      
       
       true
     end
   end
 
-  attr :accepted_object_classes
+  attr :accepted_classes
   
   # Initializes the container with the accepted class(es)
   def initialize classes = []
-    @accepted_object_classes = DbArray.new classes
+    @accepted_classes = DbArray.new classes
   end
   
   # overrides the []= operator to perform a validation that the object is accepted in the container.
   # sets the DbObject's internal id
   def []=(key, elem)
-    raise Exception.new "the container accept objects of classe(s): #{@accepted_object_classes.to_s}" unless @accepted_object_classes.include? elem.class
+    raise InvalidClassError.new "the container accept objects of classe(s): #{@accepted_classes.to_s}" unless @accepted_classes.include? elem.class
 
     if elem.id.nil?
       elem.id = next_id  
@@ -63,12 +63,12 @@ class DbContainer < Hash
   
   # adds a new accepted class to the list
   def add_accepted_class klass
-    @accepted_object_classes << klass unless @accepted_object_classes.include? klass
+    @accepted_classes << klass unless @accepted_classes.include? klass
   end
   
   # removes a class from the accepted classes' list
   def remove_accepted_class klass
-    @accepted_object_classes.delete klass
+    @accepted_classes.delete klass
   end
   
   def valid?

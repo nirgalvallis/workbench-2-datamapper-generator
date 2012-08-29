@@ -1,9 +1,14 @@
-require_relative './db_objects/db_object'
-require_relative './db_objects/database'
-require_relative './db_objects/table'
-require_relative './db_objects/column'
+%w(
+  ./models/*.rb
+  ./models/db_objects/db_object.rb
+  ./models/db_objects/**/*.rb
+  ./models/containers/db_container.rb
+  ./models/containers/**/*.rb
+).each do |directory|
+  Dir.glob("#{directory}").each do |path|
+    require path
+  end
+end
 
-require_relative './containers/db_container'
-require_relative './containers/tables'
-require_relative './containers/columns'
+
 

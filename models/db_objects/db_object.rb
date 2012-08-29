@@ -3,9 +3,10 @@ class DbObject
   def initialize properties = nil
     @errors = {}
     @custom_properties = {}
+    @comments = nil
 
     properties.each do |key, value|
-      warn "Warning: Setting the :id property can have unwanted consequences" if key == :id
+#      warn "Warning: Setting the :id property can have unwanted consequences" if key == :id
       
       if key.is_a?(Symbol)
         if self.respond_to?(key)
@@ -37,6 +38,16 @@ class DbObject
   def name=(value)
     @name = value
   end
+  
+  ##
+  # comments getter and setter
+  def comments
+    @comments
+  end
+  
+  def comments=(value)
+    @comments = value
+  end
 
   ##
   # errors' getter
@@ -53,6 +64,11 @@ class DbObject
   ## 
   # true if object is valid
   def valid?
+    if block_given?
+      @errors = {}
+      yield
+    end
+
     @errors[:id] = "'id' is missing" if @id.nil?
     @errors[:name] = "'name' is missing" if @name.nil?
     
