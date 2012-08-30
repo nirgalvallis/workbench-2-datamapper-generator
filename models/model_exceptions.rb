@@ -1,1 +1,3 @@
-class InvalidClassError < Exception; end
+module DbModel
+  class InvalidClassError < Exception; end
+end

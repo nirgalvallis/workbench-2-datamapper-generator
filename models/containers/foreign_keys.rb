@@ -1,6 +1,8 @@
-class ForeignKeys < DbContainer
-  def initialize
-    super ForeignKey
+module DbModel
+  class ForeignKeys < DbContainer
+    def initialize
+      super ForeignKey
+    end
+    
   end
-  
 end
